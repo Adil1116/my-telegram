@@ -1,0 +1,29 @@
+name: Build Telegram APK
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Clone Telegram
+      run: git clone https://github.com/DrKLO/Telegram.git
+    
+    - name: Setup JDK
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+    
+    - name: Build APK
+      run: |
+        cd Telegram
+        ./gradlew assembleDebug
+    
+    - name: Upload APK
+      uses: actions/upload-artifact@v3
+      with:
+        name: telegram-apk
+        path: Telegram/TMessagesProj_App/build/outputs/apk/

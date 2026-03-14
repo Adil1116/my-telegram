@@ -1,4 +1,4 @@
-name: Build Telegram APK
+name: Build Huria App
 
 on:
   push:
@@ -10,21 +10,30 @@ jobs:
     steps:
     - name: Clone Telegram
       run: git clone https://github.com/DrKLO/Telegram.git
-    
+
+    - name: Customize Huria
+      run: |
+        cd Telegram
+        find . -name "strings.xml" | xargs sed -i 's/Telegram/Huria/g'
+        find . -name "*.java" | xargs sed -i 's/org.telegram.messenger/com.huria.messenger/g'
+        find . -name "*.gradle" | xargs sed -i 's/org.telegram.messenger/com.huria.messenger/g'
+        find . -name "colors.xml" | xargs sed -i 's/#2ca5e0/#1a237e/g'
+        find . -name "colors.xml" | xargs sed -i 's/#179cde/#1a237e/g'
+
     - name: Setup JDK
       uses: actions/setup-java@v4
       with:
         java-version: '17'
         distribution: 'temurin'
-    
+
     - name: Build APK
       run: |
         cd Telegram
         chmod +x gradlew
         ./gradlew assembleDebug
-    
+
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: telegram-apk
+        name: huria-app
         path: Telegram/TMessagesProj_App/build/outputs/apk/

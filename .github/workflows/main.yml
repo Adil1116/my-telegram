@@ -1,4 +1,4 @@
-name: Build Huria App
+name: huria-apk
 
 on:
   push:
